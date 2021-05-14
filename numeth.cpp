@@ -4,8 +4,9 @@
 
 #include "numeth.h"
 #include <cmath>
+#include <memory>
 
-double numeth::root::bisection(const std::function<double(double)> &f, const double &x_i, const double &x_f,
+double numeth::root::Bisection(const std::function<double(double)> &f, const double &x_i, const double &x_f,
                                const double &tol){
     double xf=x_f;
     double xi=x_i;
@@ -25,7 +26,7 @@ double numeth::root::bisection(const std::function<double(double)> &f, const dou
     return m;
 }
 // Newton-Raphson METHOD
-double numeth::root::newton(const std::function<double(double)> &f,const std::function<double(double)> &df, const double &x,
+double numeth::root::Newton(const std::function<double(double)> &f,const std::function<double(double)> &df, const double &x,
                             const double &tol) {
     double x_temp=x;
     double z=-( f(x)/df(x) );
@@ -34,4 +35,23 @@ double numeth::root::newton(const std::function<double(double)> &f,const std::fu
         x_temp+=z;
     }
     return x_temp;
+}
+
+double numeth::integration::Simpson(const double &xi, const double &xf, const std::function<double(double)> &f,
+                                    const unsigned int &n) {
+    std::unique_ptr<double> h{ std::make_unique<double>((xi+xf)/double(n))};
+    std::unique_ptr<double> s{ std::make_unique<double>(f(xi)+f(xf))};
+    for(int i=1;i<n;i++){
+        if( i%2==0){
+            *s+=(2*f(xi+i*(*h)));
+        } else{
+            *s+=(4*f(xi+i*(*h)));
+        }
+    }
+    return (*s)*(*h)/3;
+}
+
+double numeth::integration::GaussianQuadrature(const double &xi,const double &xf,const std::function<double(double)> &f){
+    double c=(xf-xi)/2.0;
+    return (c)*f(c*(-1/(pow(3,0.5)))+(xf+xi)/2.0) + (c)*f(c*(1/(pow(3,0.5)))+(xf+xi)/2.0) ;
 }

@@ -8,8 +8,15 @@
 #include <functional>
 
 namespace numeth::root {
-    double bisection(const std::function<double(double)> &f, const double &x_i, const double &x_f, const double &tol);
-    double newton(const std::function<double(double)> &f,const std::function<double(double)> &df,const double &x,const double &tol);
+    double Bisection(const std::function<double(double)> &f, const double &x_i, const double &x_f, const double &tol);
+    double Newton(const std::function<double(double)> &f,const std::function<double(double)> &df,const double &x,const double &tol);
+}
+
+namespace numeth::integration{
+    //from xi to xf take integral of f (in n steps)
+    double Simpson(const double &xi,const double &xf,const std::function<double(double)> &f,const unsigned &n);
+
+    double GaussianQuadrature(const double &xi,const double &xf,const std::function<double(double)> &f);
 }
 
 
